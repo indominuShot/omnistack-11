@@ -17,35 +17,39 @@ export default function Profile(){
 
     const history = useHistory();
 
-        useEffect(() => {
-           api.get('Profile', {
-               headers: {
-                   authorization: ong_id
-               }
-           }).then(response => {
-               setincidents(response.data);
-           });
+    if(!ong_id){
+        history.push('/');
+    }
 
-        }, [ong_id, incidents]);
-
-        function handleLogout(){
-            localStorage.clear();
-
-            history.push('/');
-        }
-
-        async function handleDeleteIncident(id){
-            try{
-                await api.delete(`incidents/${id}`, {
-                    headers: {
-                        authorization: ong_id
-                    }
-                });
+    useEffect(() => {
+        api.get('Profile', {
+            headers: {
+                authorization: ong_id
             }
-            catch(err){
-                alert("Erro ao deletar o caso, tente novamente!")
-            }
+        }).then(response => {
+            setincidents(response.data);
+        });
+
+    }, [ong_id, incidents]);
+
+    function handleLogout(){
+        localStorage.clear();
+
+        history.push('/');
+    }
+
+    async function handleDeleteIncident(id){
+        try{
+            await api.delete(`incidents/${id}`, {
+                headers: {
+                    authorization: ong_id
+                }
+            });
         }
+        catch(err){
+            alert("Erro ao deletar o caso, tente novamente!")
+        }
+    }
 
     return (
         <div className="profile-container">
